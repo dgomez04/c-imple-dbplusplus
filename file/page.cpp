@@ -37,9 +37,25 @@ void Page::set_int(int offset, int val)
     buffer[offset + 3] = (val & 0xFF);
 };
 
-std::vector<uint8_t> Page::get_bytes(int offset) const
-{
 
+std::vector<uint8_t> Page::get_bytes(int offset) const
+{  
+    int length { get_int(offset) };
+
+    if(offset < 0 || offset + 4 + length > buffer.size())
+    {
+        return {};
+    }    
+
+    int data_offset { offset + 4 };
+    std::vector<uint8_t> rs {};
+
+    auto begin = buffer.begin() + data_offset;
+    auto end = buffer.begin() + data_offset + length;
+
+    std::copy(begin, end, std::back_inserter(rs));
+
+    return rs;
 };
 
 void Page::set_bytes(int offset, const std::vector<uint8_t>& b)
