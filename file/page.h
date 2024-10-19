@@ -18,7 +18,7 @@ class Page
 
         void set_bytes(int offset, const std::vector<uint8_t>& bytes);
 
-        std::string get_strings(int offset) const;
+        std::string get_string(int offset) const;
 
         void set_string(int offset, std::string_view s);
 };

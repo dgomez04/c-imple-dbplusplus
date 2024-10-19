@@ -66,3 +66,14 @@ void Page::set_bytes(int offset, const std::vector<uint8_t>& b)
     }
 };
 
+std::string Page::get_string(int offset) const
+{
+    std::vector<uint8_t> rs = get_bytes(offset);
+    return std::string(rs.begin(), rs.end());
+};
+
+void Page::set_string(int offset, std::string_view s)
+{
+    set_bytes(offset, std::vector<uint8_t>(s.begin(), s.end()));
+};
+
