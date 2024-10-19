@@ -8,10 +8,8 @@ Page::Page(int block_size)
 
 int Page::get_int(int offset) const
 {    
-    if(offset < 0 || offset + 3 > buffer.size())
-    {
-        return -1;
-    }
+    if(offset < 0 || offset + 3 > buffer.size()) return -1;
+
 
     uint8_t pos_1 = buffer[offset];
     uint8_t pos_2 = buffer[offset + 1];
@@ -26,10 +24,7 @@ int Page::get_int(int offset) const
 
 void Page::set_int(int offset, int val)
 {
-    if(offset < 0 || offset + 3 > buffer.size())
-    {
-        return;
-    }
+    if(offset < 0 || offset + 3 > buffer.size()) return;
 
     buffer[offset] = (val >> 24) & 0xFF;
     buffer[offset + 1] = (val >> 16) & 0xFF;
@@ -42,10 +37,7 @@ std::vector<uint8_t> Page::get_bytes(int offset) const
 {  
     int length { get_int(offset) };
 
-    if(offset < 0 || offset + 4 + length > buffer.size())
-    {
-        return {};
-    }    
+    if(offset < 0 || offset + 4 + length > buffer.size()) return {};    
 
     int data_offset { offset + 4 };
     std::vector<uint8_t> rs {};
@@ -62,10 +54,7 @@ void Page::set_bytes(int offset, const std::vector<uint8_t>& b)
 {
     int length { b.size() };
 
-    if(offset < 0 || offset + 4 + length > buffer.size())
-    {
-        return;
-    }
+    if(offset < 0 || offset + 4 + length > buffer.size()) return;
 
     set_int(offset, length);
 
