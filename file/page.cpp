@@ -26,6 +26,14 @@ int Page::get_int(int offset) const
 
 void Page::set_int(int offset, int val)
 {
+    if(offset < 0 || offset + 3 >= buffer.size())
+    {
+        return;
+    }
 
+    buffer[offset] = (val >> 24) & 0xFF;
+    buffer[offset + 1] = (val >> 16) & 0xFF;
+    buffer[offset + 2] = (val >> 8) & 0xFF;
+    buffer[offset + 3] = (val & 0xFF);
 };
 
