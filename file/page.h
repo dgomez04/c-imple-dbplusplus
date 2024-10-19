@@ -21,6 +21,10 @@ class Page
         std::string get_string(int offset) const;
 
         void set_string(int offset, std::string_view s);
+
+        int max_length(int strlen);
+
+        uint8_t* contents();
 };
 
 #endif

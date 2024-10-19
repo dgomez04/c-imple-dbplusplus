@@ -43,3 +43,8 @@ Thumbs.db
 
 # Ignore clangd index files
 .clangd/
+
+main
+main.dSYM/
+
+db/

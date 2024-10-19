@@ -12,7 +12,7 @@ class Block
     public: 
         Block(std::string filename, int block_id);
 
-        std::string_view get_filename() const;
+        std::string get_filename() const;
 
         int get_id() const;
 

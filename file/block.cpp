@@ -9,7 +9,7 @@ Block::Block(std::string filename, int block_id)
 {
 };
 
-std::string_view Block::get_filename() const
+std::string Block::get_filename() const
 {
     return filename;
 };

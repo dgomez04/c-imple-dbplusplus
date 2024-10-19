@@ -52,7 +52,7 @@ std::vector<uint8_t> Page::get_bytes(int offset) const
 
 void Page::set_bytes(int offset, const std::vector<uint8_t>& b)
 {
-    int length { b.size() };
+    int length { static_cast<int>(b.size()) };
 
     if(offset < 0 || offset + 4 + length > buffer.size()) return;
 
@@ -77,3 +77,12 @@ void Page::set_string(int offset, std::string_view s)
     set_bytes(offset, std::vector<uint8_t>(s.begin(), s.end()));
 };
 
+int Page::max_length(int strlen) 
+{
+    const int bytes_per_char = 1; // assuming 1 byte for ASCII;
+    return sizeof(int) + (strlen * bytes_per_char);
+}
+
+uint8_t* Page::contents() {
+    return buffer.data();
+}
