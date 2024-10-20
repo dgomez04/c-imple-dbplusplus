@@ -47,7 +47,7 @@ void FileManager::read(const Block& block, Page& page)
     std::fstream& file { get_file(block.get_filename()) };
     file.clear();
     file.seekg(block.get_id() * block_size);
-    if(!file.read(reinterpret_cast<char*>(page.contents()), block_size)) { throw std::runtime_error("failed to read block: " + std::to_string(block.get_id())); };
+    if(!file.read(reinterpret_cast<char*>(page.contents()), block_size)) throw std::runtime_error("failed to read block: " + std::to_string(block.get_id())); 
 };
 
 void FileManager::write(const Block& block, Page& page)
@@ -56,7 +56,7 @@ void FileManager::write(const Block& block, Page& page)
     std::fstream& file { get_file(block.get_filename()) };
     file.clear();
     file.seekp(block.get_id() * block_size);
-    if (!file.write(reinterpret_cast<const char*>(page.contents()), block_size)) { throw std::runtime_error("failed to write to block: " + std::to_string(block.get_id())); } 
+    if (!file.write(reinterpret_cast<const char*>(page.contents()), block_size)) throw std::runtime_error("failed to write to block: " + std::to_string(block.get_id())); 
     file.flush();
 };
 
@@ -71,7 +71,7 @@ Block FileManager::append(std::string filename)
 
     std::fstream& file { get_file(filename) };
     file.seekp(block_id * block_size);
-    if (!file.write(reinterpret_cast<const char*>(b.data()), b.size())) { throw std::runtime_error("failed to write to file: " + filename); }
+    if (!file.write(reinterpret_cast<const char*>(b.data()), b.size())) throw std::runtime_error("failed to write to file: " + filename);
     
     return block;
 }
