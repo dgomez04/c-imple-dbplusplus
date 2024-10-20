@@ -22,31 +22,30 @@ FileManager::FileManager(const std::filesystem::path& directory, int block_size)
 
 std::fstream& FileManager::get_file(const std::string& filename)
 {
-    auto iterator { open_files.find(filename) };
-    
-    if(iterator == open_files.end())
+    auto& file = open_files[filename];
+
+    if(!file.is_open())
     {
-        std::filesystem::path path { directory / filename};
-        auto& file = open_files[filename];
+        std::filesystem::path path = directory / filename;
 
-        file.open(path, std::ios::out);
-        if(!file.is_open()) throw std::runtime_error("failed to create file: " + filename);
-        file.close();
+        if(!std::filesystem::exists(path))
+        {
+            file.open(path, std::ios::out | std::ios::binary);
+            if(!file.is_open()) throw std::runtime_error("cannot create file: " + filename);
+            file.close();
+        }
 
-        file.open(path, std::ios::in | std::ios::out);
-        if(!file.is_open()) throw std::runtime_error("failed to open file for reading/writing: " + filename);
-
-
-        open_files[filename] = std::move(file);
+        file.open(path, std::ios::in | std::ios::out | std::ios::binary);
+        if(!file.is_open()) throw std::runtime_error("cannot open file for reading/writing: " + filename);
     }
-
-    return iterator->second;
+    return file;
 };
 
 void FileManager::read(const Block& block, Page& page)
 {
     std::lock_guard<std::mutex> lock(mtx);
     std::fstream& file { get_file(block.get_filename()) };
+    file.clear();
     file.seekg(block.get_id() * block_size);
     if(!file.read(reinterpret_cast<char*>(page.contents()), block_size)) { throw std::runtime_error("failed to read block: " + std::to_string(block.get_id())); };
 };
@@ -55,8 +54,10 @@ void FileManager::write(const Block& block, Page& page)
 {
     std::lock_guard<std::mutex> lock(mtx);
     std::fstream& file { get_file(block.get_filename()) };
+    file.clear();
     file.seekp(block.get_id() * block_size);
     if (!file.write(reinterpret_cast<const char*>(page.contents()), block_size)) { throw std::runtime_error("failed to write to block: " + std::to_string(block.get_id())); } 
+    file.flush();
 };
 
 Block FileManager::append(std::string filename)
@@ -79,20 +80,15 @@ Block FileManager::append(std::string filename)
 
 int FileManager::length(std::string filename)
 {
-    auto iterator { open_files.find(filename) };
+    std::fstream& file = get_file(filename);
+    file.clear();
 
-    if(iterator != open_files.end())
-    {
-        std::fstream& file { iterator->second };
-        if(!file.is_open()) throw std::runtime_error("failed to open file: " + filename);
-        
-        file.seekg(0, std::ios::end);
-        std::streampos size = file.tellg();
-        if(size == static_cast<std::streampos>(-1)) throw std::runtime_error("failed to get file size for:" + filename);
+    file.seekg(0, std::ios::end);
+    std::streampos size = file.tellg();
 
-        return static_cast<int>(size / block_size);
-    }
-    return -1;
+    if(size == static_cast<std::streampos>(-1)) throw std::runtime_error("failed to get file size for:" + filename);
+
+    return static_cast<int>(size / block_size);
 };
 
 bool FileManager::get_is_new() const { return is_new; };
