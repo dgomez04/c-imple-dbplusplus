@@ -24,6 +24,11 @@ bool operator==(const Block& b1, const Block& b2)
     return b1.filename == b2.filename && b1.block_id == b2.block_id;
 };
 
+bool operator!=(const Block& b1, const Block& b2)
+{
+    return !(b1 == b2);
+};
+
 std::string Block::to_string() const
 {
     std::ostringstream buffer;

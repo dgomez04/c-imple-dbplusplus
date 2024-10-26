@@ -18,6 +18,8 @@ class Block
 
         friend bool operator==(const Block& b1, const Block& b2);
 
+        friend bool operator!=(const Block& b1, const Block& b2);
+
         std::string to_string() const; 
 
         std::size_t hashcode() const;

@@ -8,7 +8,9 @@ class Page
     private: 
         std::vector<uint8_t> buffer;
     public: 
-        Page(int block_size);
+        Page(int block_size); // For creating data buffers.
+        
+        Page(std::vector<uint8_t> b); // For creating log pages.
 
         int get_int(int offset) const;
 
