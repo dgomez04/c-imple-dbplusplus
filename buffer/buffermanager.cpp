@@ -42,7 +42,7 @@ void BufferManager::unpin(Buffer& buffer)
 Buffer& BufferManager::pin(Block block)
 {
     std::unique_lock<std::mutex> lock(mtx);
-    auto start_time = std::chrono::steady_clock::now();
+    auto start_time {std::chrono::steady_clock::now()};
 
     Buffer* buffer = try_to_pin(block);
 
