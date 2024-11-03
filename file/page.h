@@ -24,7 +24,7 @@ class Page
 
         void set_string(int offset, std::string_view s);
 
-        int max_length(int strlen);
+        static int max_length(int strlen);
 
         uint8_t* contents();
 };
