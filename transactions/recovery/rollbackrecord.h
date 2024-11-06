@@ -6,7 +6,7 @@
 #include "logmanager.h"
 #include <vector>
 
-class RollbackRecord : LogRecord
+class RollbackRecord : public LogRecord
 {    
     private:
         int tsx_no;

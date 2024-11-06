@@ -6,7 +6,7 @@
 #include "logmanager.h"
 #include <vector>
 
-class CheckpointRecord : LogRecord
+class CheckpointRecord : public LogRecord
 {    
     public: 
         CheckpointRecord() = default;

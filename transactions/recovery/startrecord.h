@@ -7,7 +7,7 @@
 #include "logmanager.h"
 #include <vector>
 
-class StartRecord : LogRecord
+class StartRecord : public LogRecord
 {    
     private: 
         int tsx_no;

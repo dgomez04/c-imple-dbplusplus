@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 
-class SetStringRecord : LogRecord
+class SetStringRecord : public LogRecord
 {    
     private: 
         int tsx_no;

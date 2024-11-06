@@ -6,7 +6,7 @@
 #include "logmanager.h"
 #include <vector>
 
-class CommitRecord : LogRecord
+class CommitRecord : public LogRecord
 {    
     private: 
         int tsx_no;
